@@ -1,0 +1,716 @@
+@startuml Onboarding_Platform_Class_Diagram
+' =============================================================================
+' Plateforme d'Onboarding — Diagramme de classes
+' Notation : UML 2.5 | Couches : Domaine, Services, Présentation
+' Outil : PlantUML / StarUML (extension PlantUML)
+' =============================================================================
+
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #2C5F8A
+  ArrowColor #333333
+}
+skinparam package {
+  BackgroundColor #F0F4F8
+  BorderColor #2C5F8A
+}
+
+title Diagramme de classes\n<b>Plateforme d'Onboarding — Modèle domaine & services</b>
+
+' =============================================================================
+' ÉNUMÉRATIONS
+' =============================================================================
+package "«enumeration» Domaine — Énumérations" as PKG_ENUM #E8F0FE {
+
+  enum Role {
+    ADMINISTRATEUR
+    MANAGER
+    COLLABORATEUR
+  }
+
+  enum TypeContrat {
+    CDI
+    CDD
+    CVIP
+  }
+
+  enum TypeEtape {
+    ADMINISTRATIF
+    TECHNIQUE
+    HUMAIN
+    SIGNATURE
+  }
+
+  enum StatutParcours {
+    ACTIF
+    DESACTIVE
+  }
+
+  enum StatutAssignment {
+    EN_ATTENTE
+    EN_COURS
+    TERMINE
+    EN_RETARD
+    EN_PAUSE
+    ANNULE
+    --
+    +getDisplayName() : String
+  }
+
+  enum StatutChecklist {
+    EN_ATTENTE
+    EN_COURS
+    TERMINE
+    SAUTE
+    BLOQUE
+  }
+
+  enum NotificationType {
+    ETAPE_COMPLETE
+    PARCOURS_COMPLETE
+    ASSIGNMENT_ASSIGNED
+    ASSIGNMENT_OVERDUE
+    DOCUMENT_UPLOADED
+    DOCUMENT_SIGNED
+    EVALUATION_RECEIVED
+    USER_CREATED
+    SYSTEM_ALERT
+    DEADLINE_REMINDER
+    ...
+  }
+
+  enum ReportType {
+    INAPPROPRIATE_BEHAVIOR
+    POLICY_VIOLATION
+    SECURITY_CONCERN
+    PERFORMANCE_ISSUE
+    OTHER
+  }
+
+  enum ReportStatus {
+    PENDING
+    IN_REVIEW
+    RESOLVED
+    DISMISSED
+  }
+}
+
+' =============================================================================
+' ENTITÉS JPA (MODÈLE DOMAINe)
+' =============================================================================
+package "«entity» Domaine — Entités" as PKG_ENTITY #FFF8E7 {
+
+  class User <<Entity>> {
+    - id : Long
+    - prenom : String
+    - nom : String
+    - email : String {unique}
+    - role : Role
+    - poste : String
+    - departement : String
+    - managerName : String
+    - dateEmbauche : LocalDateTime
+    - typeContrat : TypeContrat
+    - adresse : String
+    - telephone : String
+    - cin : String
+    - diplome : String
+    - password : String
+    - resetToken : String
+    - resetTokenExpiry : LocalDateTime
+    - statut : Boolean
+    - emailVerified : Boolean
+    - profilePhotoUrl : String
+    - dateNaissance : LocalDate
+    - dateCreation : LocalDateTime
+    - dateModification : LocalDateTime
+    --
+    + getId() : Long
+    + getPrenom() : String
+    + getNom() : String
+    + getEmail() : String
+    + getRole() : Role
+    + getManager() : User
+    + setManager(User) : void
+    + getManagedEmployees() : List<User>
+    + getStatut() : Boolean
+    + setStatut(Boolean) : void
+    + getEmailVerified() : Boolean
+    + preUpdate() : void
+  }
+
+  class OnboardingParcours <<Entity>> {
+    - id : Long
+    - nom : String
+    - description : String
+    - categorieCible : String
+    - departementCible : String
+    - dureeGlobaleEstimee : Integer
+    - deadlineGlobaleParDefaut : Integer
+    - statut : StatutParcours
+    - dateCreation : LocalDateTime
+    - dateModification : LocalDateTime
+    --
+    + getId() : Long
+    + getNom() : String
+    + getTitre() : String
+    + getEtapes() : List<Etape>
+    + setStatut(StatutParcours) : void
+    + preUpdate() : void
+  }
+
+  class Etape <<Entity>> {
+    - id : Long
+    - nom : String
+    - description : String
+    - resourceLinks : String
+    - type : TypeEtape
+    - dureeEstimee : Integer
+    - ordreExecution : Integer
+    - requiertDocument : Boolean
+    - dateCreation : LocalDateTime
+    - dateModification : LocalDateTime
+    --
+    + getId() : Long
+    + getNom() : String
+    + getType() : TypeEtape
+    + getParcours() : OnboardingParcours
+    + setParcours(OnboardingParcours) : void
+    + getRequiertDocument() : Boolean
+    + preUpdate() : void
+  }
+
+  class Assignment <<Entity>> {
+    - id : Long
+    - dateDebut : LocalDate
+    - dateFinPrevisionnelle : LocalDate
+    - dateFinReelle : LocalDate
+    - statut : StatutAssignment
+    - pourcentageAvancement : Integer
+    - dateCreation : LocalDate
+    - dateModification : LocalDate
+    - assignePar : String
+    --
+    + getId() : Long
+    + getUser() : User
+    + getParcours() : OnboardingParcours
+    + getStatut() : StatutAssignment
+    + setStatut(StatutAssignment) : void
+    + getPourcentageAvancement() : Integer
+    + getTitre() : String
+    + updateStatusBasedOnDates() : void
+  }
+
+  class Checklist <<Entity>> {
+    - id : Long
+    - titre : String
+    - description : String
+    - statut : StatutChecklist
+    - ordre : Integer
+    - obligatoire : Boolean
+    - requiertDocument : Boolean
+    - dateCreation : LocalDate
+    - dateRealisation : LocalDate
+    - creePar : String
+    --
+    + getId() : Long
+    + getAssignment() : Assignment
+    + getEtape() : Etape
+    + getStatut() : StatutChecklist
+    + setStatut(StatutChecklist) : void
+  }
+
+  class Document <<Entity>> {
+    - id : Long
+    - etapeId : Long
+    - filename : String
+    - originalFilename : String
+    - fileType : String
+    - fileSize : Long
+    - uploadDate : LocalDateTime
+    - isSigned : Boolean
+    - signatureDate : LocalDateTime
+    - uploadedByName : String
+    - signedByUserId : Long
+    - signedByUserEmail : String
+    - signedByUserName : String
+    - signatureIpAddress : String
+    - documentHash : String
+    - signatureUserAgent : String
+    - signatureType : String
+    - content : byte[]
+    --
+    + getId() : Long
+    + getEtapeId() : Long
+    + getIsSigned() : Boolean
+    + setIsSigned(Boolean) : void
+    + getDocumentHash() : String
+  }
+
+  class DocumentSignatureAudit <<Entity>> {
+    - id : Long
+    - documentId : Long
+    - userId : Long
+    - userEmail : String
+    - userName : String
+    - signatureDate : LocalDateTime
+    - ipAddress : String
+    - documentHash : String
+    - userAgent : String
+    - signatureType : String
+    --
+    + DocumentSignatureAudit(...)
+    + getId() : Long
+  }
+
+  class Evaluation <<Entity>> {
+    - id : Long
+    - rating : Integer
+    - comment : String
+    - dateEvaluation : LocalDateTime
+    --
+    + Evaluation(checklist, user, rating, comment)
+    + getChecklist() : Checklist
+    + getUser() : User
+    + getRating() : Integer
+  }
+
+  class Notification <<Entity>> {
+    - id : Long
+    - message : String
+    - type : NotificationType
+    - userId : Long
+    - senderId : Long
+    - entityType : String
+    - entityId : Long
+    - dateCreation : LocalDateTime
+    - dateLecture : LocalDateTime
+    - read : Boolean
+    --
+    + getId() : Long
+    + getRead() : Boolean
+    + setRead(Boolean) : void
+  }
+
+  class TeamMessage <<Entity>> {
+    - id : Long
+    - teamKey : String
+    - content : String
+    - sentAt : LocalDateTime
+    - editedAt : LocalDateTime
+    --
+    + getTeamKey() : String
+    + getSender() : User
+    + getContent() : String
+  }
+
+  class UserReport <<Entity>> {
+    - id : Long
+    - reason : String
+    - status : ReportStatus
+    - createdAt : LocalDateTime
+    - resolvedAt : LocalDateTime
+    - adminNotes : String
+    --
+    + UserReport(reportedUser, reporter, type, reason)
+    + getReportedUser() : User
+    + getReporter() : User
+    + getStatus() : ReportStatus
+  }
+
+  class EmailVerification <<Entity>> {
+    - id : Long
+    - verificationToken : String
+    - createdAt : LocalDateTime
+    - expiresAt : LocalDateTime
+    - isVerified : Boolean
+    - verifiedAt : LocalDateTime
+    --
+    + isExpired() : boolean
+    + markAsVerified() : void
+    + getUser() : User
+  }
+
+  class UserProfile <<Entity>> {
+    - id : Long
+    - email : String {unique}
+    - createdAt : LocalDateTime
+    - updatedAt : LocalDateTime
+    --
+    + getUser() : User
+    + onCreate() : void
+    + onUpdate() : void
+  }
+
+  class AuditLog <<Entity>> {
+    - id : Long
+    - action : String
+    - ancienneValeur : String
+    - nouvelleValeur : String
+    - dateAction : LocalDateTime
+    - effectuePar : String
+    --
+    + AuditLog(user, action, ...)
+    + getUser() : User
+  }
+}
+
+' =============================================================================
+' RELATIONS ENTRE ENTITÉS
+' =============================================================================
+
+User "1" --> "0..1" User : manager\n{manager_id}
+User "1" *-- "0..*" User : managedEmployees
+User "1" *-- "0..*" AuditLog
+User "1" *-- "0..*" Assignment : collaborateur
+User "1" *-- "0..*" Evaluation
+User "1" *-- "0..*" EmailVerification
+User "1" -- "0..1" UserProfile
+User "1" --> "0..*" TeamMessage : sender
+User "1" --> "0..*" UserReport : reportedUser
+User "1" --> "0..*" UserReport : reporter
+User "1" --> "0..*" UserReport : resolvedBy
+
+OnboardingParcours "1" *-- "1..*" Etape : contient
+OnboardingParcours "1" <-- "0..*" Assignment
+
+Assignment "1" *-- "1..*" Checklist : génère
+Etape "0..1" <-- Checklist : référence
+Checklist "1" <-- "0..*" Evaluation
+
+Etape "1" <-- "0..*" Document : etapeId\n(logique)
+
+Document "1" ..> "0..*" DocumentSignatureAudit : audit\n(documentId)
+
+User ..> Role : role
+User ..> TypeContrat : typeContrat
+Etape ..> TypeEtape : type
+OnboardingParcours ..> StatutParcours : statut
+Assignment ..> StatutAssignment : statut
+Checklist ..> StatutChecklist : statut
+Notification ..> NotificationType : type
+UserReport ..> ReportType : reportType
+UserReport ..> ReportStatus : status
+
+' =============================================================================
+' COUCHE SERVICES (LOGIQUE MÉTIER)
+' =============================================================================
+package "«service» Application — Services" as PKG_SVC #E8FCE8 {
+
+  class UserService <<Service>> {
+    + loadUserByUsername(email) : UserDetails
+    + createUser(dto, createdBy) : User
+    + updateUserRole(userId, role, modifiedBy) : User
+    + activateUser(userId, modifiedBy) : User
+    + deactivateUser(userId, modifiedBy) : User
+    + deleteUser(userId, deletedBy) : void
+    + setPassword(resetToken, newPassword) : User
+    + findByEmail(email) : Optional<User>
+    + findById(id) : Optional<User>
+    + findAll() : List<User>
+    + findByRole(role) : List<User>
+    + searchUsers(keyword) : List<User>
+    + save(user) : User
+    + migrateManagerRelationships() : void
+  }
+
+  class JwtService <<Service>> {
+    + generateToken(userDetails) : String
+    + generateToken(email, role, prenom, nom, userId) : String
+    + extractUsername(token) : String
+    + validateToken(token, userDetails) : Boolean
+    + isTokenExpired(token) : Boolean
+  }
+
+  class EmailService <<Service>> {
+    + sendPasswordResetEmail(to, token) : void
+    + sendWelcomeEmail(to, prenom, token) : void
+    + sendVerificationEmail(to, token) : void
+    + sendReportWarningEmail(...) : void
+    + sendReportApprovedEmail(...) : void
+    + generateResetToken() : String
+    + calculateTokenExpiry() : LocalDateTime
+  }
+
+  class EmailVerificationService <<Service>> {
+    + sendVerificationEmail(userId) : String
+    + verifyEmail(token) : boolean
+    + isEmailVerified(userId) : boolean
+    + cleanupExpiredTokens() : void
+  }
+
+  class OnboardingParcoursService <<Service>> {
+    + getAllParcours() : List<OnboardingParcours>
+    + getParcoursById(id) : Optional<OnboardingParcours>
+    + saveParcours(parcours) : OnboardingParcours
+    + updateParcours(id, details) : OnboardingParcours
+    + deleteParcours(id) : void
+    + getParcoursByStatut(statut) : List
+    + generateEtapesWithAI(parcoursId) : List<Etape>
+  }
+
+  class EtapeService <<Service>> {
+    + getAllEtapes() : List<Etape>
+    + getEtapesByParcoursId(parcoursId) : List<Etape>
+    + saveEtape(etape) : Etape
+    + updateEtape(id, details) : Etape
+    + deleteEtape(id) : void
+    + getEtapesByType(type) : List<Etape>
+  }
+
+  class ParcoursEtapeAiGeneratorService <<Service>> {
+    + generateForParcours(parcoursId) : List<Etape>
+    - inferTrack(ctx) : ParcoursTrack
+    - addBackendJavaTrack(...) : int
+    - addFrontendTrack(...) : int
+    - step(nom, desc, type, ordre, ...) : Etape
+  }
+
+  class AssignmentService <<Service>> {
+    + getAllAssignments() : List<AssignmentDTO>
+    + getAssignmentsByManager(managerId) : List
+    + getAssignmentsForCurrentUser() : List
+    + createAssignment(dto, assignePar) : AssignmentDTO
+    + updateAssignment(id, dto) : AssignmentDTO
+    + updateStatutAssignment(id, statut) : AssignmentDTO
+    + updateAvancement(id, pourcentage) : AssignmentDTO
+    + deleteAssignment(id) : void
+    + getChecklistsByAssignmentId(id) : List<ChecklistDTO>
+    + isChecklistUnlocked(checklistId) : boolean
+    + updateProgressionBasedOnChecklists(id) : void
+    + checkAndUpdateOverdueAssignments() : void
+    - genererChecklist(assignment) : void
+  }
+
+  class DocumentService <<Service>> {
+    + getDocumentsByEtapeId(etapeId) : List<Document>
+    + uploadDocument(file, etapeId) : Document
+    + signDocument(documentId, request) : Document
+    + deleteDocument(documentId) : void
+    + downloadDocument(documentId) : Document
+    - getClientIpAddress(request) : String
+  }
+
+  class EvaluationService <<Service>> {
+    + createEvaluation(checklistId, userId, rating, comment) : Evaluation
+    + getEvaluationByUserAndChecklist(userId, checklistId) : Evaluation
+    + canUserEvaluate(userId, checklistId) : boolean
+    + getEvaluationsByChecklist(checklistId) : List
+    + calculateAverageRating(checklistId) : double
+  }
+
+  class NotificationService <<Service>> {
+    + getNotificationsForUser(userId) : List<Notification>
+    + getUnreadNotificationsCount(userId) : Long
+    + markNotificationAsRead(id) : void
+    + markAllNotificationsAsRead(userId) : void
+    + sendAssignmentAssignedNotification(assignment) : void
+    + sendDocumentSignedNotification(...) : void
+    + sendEvaluationReceivedNotification(evaluation) : void
+    + sendDeadlineReminders() : void
+    + sendUserCreationNotification(user) : void
+  }
+
+  class AnalyticsService <<Service>> {
+    + getGlobalProgress() : Map
+    + getOverdueAssignments() : List
+    + getDepartmentStats() : List
+    + getRealtimeMetrics() : Map
+    + getFilteredAssignments(filters) : List
+  }
+
+  class TeamChatService <<Service>> {
+    + resolveTeamKey(user) : String
+    + getMessagesForUser(user) : List<TeamMessageDTO>
+    + sendMessage(sender, content) : TeamMessageDTO
+    + updateMessage(user, messageId, content) : TeamMessageDTO
+    + deleteMessage(user, messageId) : void
+    + canAccessTeam(user, teamKey) : boolean
+    + isWithinModifyWindow(message) : boolean
+  }
+
+  class UserReportService <<Service>> {
+    + createReport(...) : UserReport
+    + getPendingReports() : List<UserReport>
+    + resolveReport(reportId, ...) : UserReport
+    + getAllReports() : List
+  }
+
+  class ProfileService <<Service>> {
+    + getUserProfile(userId) : UserProfileDTO
+    + updateProfile(userId, dto) : User
+    + changePassword(userId, dto) : boolean
+    + uploadProfilePhoto(userId, file) : String
+  }
+
+  class PasswordValidationService <<Service>> {
+    + validatePassword(password) : void
+    + isValid(password) : boolean
+  }
+
+  class ScheduledTasks <<Component>> {
+    + updateOverdueAssignments() : void
+    + sendDeadlineReminders() : void
+  }
+}
+
+' =============================================================================
+' COUCHE PRÉSENTATION (CONTRÔLEURS REST)
+' =============================================================================
+package "«controller» Présentation — API REST" as PKG_CTRL #FCE8E8 {
+
+  class AuthController <<RestController>> {
+    + initAdmin() : ResponseEntity
+    + login(request) : ResponseEntity
+    + register(request) : ResponseEntity
+    + forgotPassword(email) : ResponseEntity
+    + resetPassword(dto) : ResponseEntity
+    + logout() : ResponseEntity
+  }
+
+  class UserController <<RestController>> {
+    + createUser(dto) : ResponseEntity
+    + getAllUsers() : ResponseEntity
+    + getTeamMembers() : ResponseEntity
+    + getUserById(id) : ResponseEntity
+    + updateRole(id, role) : ResponseEntity
+    + activateUser(id) : ResponseEntity
+    + deactivateUser(id) : ResponseEntity
+    + deleteUser(id) : ResponseEntity
+    + getCurrentUser() : ResponseEntity
+  }
+
+  class OnboardingParcoursController <<RestController>> {
+    + getAllParcours() : ResponseEntity
+    + getParcoursById(id) : ResponseEntity
+    + createParcours(parcours) : ResponseEntity
+    + updateParcours(id, parcours) : ResponseEntity
+    + deleteParcours(id) : ResponseEntity
+    + generateEtapesAI(id) : ResponseEntity
+  }
+
+  class AssignmentController <<RestController>> {
+    + getAllAssignments() : ResponseEntity
+    + getMyAssignments() : ResponseEntity
+    + createAssignment(dto) : ResponseEntity
+    + updateAssignment(id, dto) : ResponseEntity
+    + updateStatut(id, statut) : ResponseEntity
+    + getChecklists(assignmentId) : ResponseEntity
+    + updateChecklistStatut(id, statut) : ResponseEntity
+  }
+
+  class DocumentController <<RestController>> {
+    + getByEtape(etapeId) : ResponseEntity
+    + upload(file, etapeId) : ResponseEntity
+    + sign(documentId) : ResponseEntity
+    + download(documentId) : ResponseEntity
+    + delete(documentId) : ResponseEntity
+  }
+
+  class EvaluationController <<RestController>> {
+    + createEvaluation(request) : ResponseEntity
+    + getByUserAndChecklist(...) : ResponseEntity
+    + canEvaluate(...) : ResponseEntity
+    + getAverage(checklistId) : ResponseEntity
+  }
+
+  class NotificationController <<RestController>> {
+    + getNotifications() : ResponseEntity
+    + getUnreadCount() : ResponseEntity
+    + markAsRead(id) : ResponseEntity
+    + sendBroadcast(message) : ResponseEntity
+  }
+
+  class AnalyticsController <<RestController>> {
+    + getGlobalProgress() : ResponseEntity
+    + getOverdue() : ResponseEntity
+    + getDepartments() : ResponseEntity
+    + getRealtime() : ResponseEntity
+  }
+
+  class TeamChatController <<RestController>> {
+    + getMessages() : ResponseEntity
+    + sendMessage(request) : ResponseEntity
+    + updateMessage(id, request) : ResponseEntity
+    + deleteMessage(id) : ResponseEntity
+  }
+
+  class UserReportController <<RestController>> {
+    + createReport(dto) : ResponseEntity
+    + getPending() : ResponseEntity
+    + resolve(reportId, dto) : ResponseEntity
+  }
+}
+
+' =============================================================================
+' DÉPENDANCES SERVICES → ENTITÉS & ENTRE COUCHES
+' =============================================================================
+
+UserService ..> User : utilise
+UserService ..> UserRepository : <<repository>>
+JwtService ..> User : utilise
+OnboardingParcoursService ..> OnboardingParcours : utilise
+OnboardingParcoursService ..> ParcoursEtapeAiGeneratorService : délègue
+EtapeService ..> Etape : utilise
+AssignmentService ..> Assignment : utilise
+AssignmentService ..> Checklist : génère
+AssignmentService ..> NotificationService : notifie
+DocumentService ..> Document : utilise
+DocumentService ..> DocumentSignatureAudit : crée
+EvaluationService ..> Evaluation : utilise
+EvaluationService ..> NotificationService : notifie
+NotificationService ..> Notification : utilise
+TeamChatService ..> TeamMessage : utilise
+UserReportService ..> UserReport : utilise
+EmailVerificationService ..> EmailVerification : utilise
+ScheduledTasks ..> AssignmentService : appelle
+ScheduledTasks ..> NotificationService : appelle
+
+AuthController ..> UserService : utilise
+AuthController ..> JwtService : utilise
+UserController ..> UserService : utilise
+OnboardingParcoursController ..> OnboardingParcoursService : utilise
+AssignmentController ..> AssignmentService : utilise
+DocumentController ..> DocumentService : utilise
+EvaluationController ..> EvaluationService : utilise
+NotificationController ..> NotificationService : utilise
+AnalyticsController ..> AnalyticsService : utilise
+TeamChatController ..> TeamChatService : utilise
+UserReportController ..> UserReportService : utilise
+
+interface UserRepository <<Repository>> {
+  + findByEmail(email) : Optional<User>
+  + findById(id) : Optional<User>
+  + save(user) : User
+}
+
+UserRepository ..> User
+
+note as N1
+  <b>Légende des stéréotypes</b>
+  • <<Entity>> : classe persistée JPA
+  • <<Service>> : logique métier @Service
+  • <<RestController>> : point d'entrée HTTP /api/*
+  • <<Repository>> : accès données Spring Data
+  • Multiplicités conformes au modèle JPA actuel
+end note
+
+note bottom of Assignment
+  <b>Règle métier :</b> updateStatusBasedOnDates()
+  calcule EN_ATTENTE / EN_COURS / EN_RETARD
+  selon dateDebut et dateFinPrevisionnelle.
+end note
+
+note bottom of ParcoursEtapeAiGeneratorService
+  Génération d'étapes par analyse
+  de mots-clés (Java, React, DevOps…).
+  Aucun appel API LLM externe.
+end note
+
+@enduml

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Créer Admin</title>
+</head>
+<body>
+    <h1>Créer Utilisateur Admin</h1>
+    <button onclick="createAdmin()">Créer Admin</button>
+    <div id="result"></div>
+
+    <script>
+        async function createAdmin() {
+            try {
+                const response = await fetch('http://localhost:8082/api/auth/init-admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const data = await response.text();
+                document.getElementById('result').innerHTML = `
+                    <h3>Résultat:</h3>
+                    <pre>${data}</pre>
+                    <p><strong>Identifiants de connexion:</strong></p>
+                    <p>Email: admin@test.com</p>
+                    <p>Mot de passe: Admin123!</p>
+                    <p><a href="http://localhost:3000" target="_blank">Aller à l'application</a></p>
+                `;
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <h3>Erreur:</h3>
+                    <p>${error.message}</p>
+                    <p>Assurez-vous que le backend est démarré sur http://localhost:8082</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

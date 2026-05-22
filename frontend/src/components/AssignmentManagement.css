@@ -1,0 +1,536 @@
+
+/* ================================================================
+   Assignment Management — Modern Glassmorphism Design
+   Inspired by CodeFlow AI reference
+   ================================================================ */
+
+.assignment-management {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  animation: glassFadeIn 0.6s ease-out;
+}
+
+/* Header */
+.assignment-management .dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 32px;
+}
+
+.assignment-management .dashboard-header::after {
+  display: none;
+}
+
+.assignment-management .dashboard-header h1,
+.assignment-management .dashboard-header .header-content h1 {
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+  margin: 0 !important;
+  padding: 24px 0 !important;
+  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 40%, #22d3ee 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  letter-spacing: -0.025em !important;
+  white-space: nowrap !important;
+  flex: 1 !important;
+  border: none !important;
+  text-shadow: none !important;
+}
+
+.assignment-management .dashboard-header h1::before {
+  display: none;
+}
+
+/* Main Content */
+.assignment-management .dashboard-main {
+  animation: glassFadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* Actions Section */
+.assignment-management .actions-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+  animation: glassFadeInUp 0.6s ease-out 0.3s both;
+}
+
+.assignment-management .actions-section .btn {
+  padding: 12px 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.assignment-management .actions-section .btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  z-index: 0;
+}
+
+.assignment-management .actions-section .btn:hover::before {
+  transform: translateX(100%);
+}
+
+.assignment-management .actions-section .btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Assignments Section */
+.assignment-management .assignments-section {
+  animation: glassFadeInUp 0.6s ease-out 0.4s both;
+}
+
+.assignment-management .assignments-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 40%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Cards */
+.assignment-management .assignment-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.assignment-management .assignment-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(99, 102, 241, 0.03));
+  pointer-events: none;
+}
+
+.assignment-management .assignment-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.assignment-management .assignment-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.assignment-management .assignment-card p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 6px 0;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.assignment-management .assignment-card p strong {
+  color: #64748b;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* ===== Role Badge (same as Dashboard) ===== */
+.assignment-management .role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.assignment-management .role-badge.administrateur {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.assignment-management .role-badge.manager {
+  background: rgba(6, 182, 212, 0.15);
+  color: #22d3ee;
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.assignment-management .role-badge.collaborateur {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ===== Header Content wrapper reset ===== */
+.assignment-management .header-content {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== User Info in AssignmentManagement header ===== */
+.assignment-management .user-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  flex-wrap: wrap !important;
+  padding: 24px 32px 24px 0 !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+}
+
+.assignment-management .user-info span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+.assignment-management .user-info .btn {
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  white-space: nowrap;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.assignment-management .user-info .btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Status Badges */
+.assignment-management .status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.assignment-management .card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.assignment-management .card-actions .btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  background: transparent;
+  color: #94a3b8;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.assignment-management .card-actions .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Table */
+.assignment-management .assignment-table {
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.assignment-management .assignment-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.assignment-management .assignment-table th {
+  padding: 12px 16px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+  text-align: left;
+}
+
+.assignment-management .assignment-table td {
+  padding: 12px 16px;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.assignment-management .assignment-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.assignment-management .assignment-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.06);
+}
+
+.assignment-management .assignment-table tbody tr:hover td {
+  color: #f1f5f9;
+}
+
+/* Modal */
+.assignment-management .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: glassFadeIn 0.2s ease-out;
+}
+
+.assignment-management .modal {
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 600px;
+  width: 92%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: glassSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.assignment-management .modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #06b6d4 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.assignment-management .modal h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 40%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Form */
+.assignment-management .form-group {
+  margin-bottom: 16px;
+}
+
+.assignment-management .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.assignment-management .form-group input,
+.assignment-management .form-group select,
+.assignment-management .form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #f1f5f9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.assignment-management .form-group input:focus,
+.assignment-management .form-group select:focus,
+.assignment-management .form-group textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.assignment-management .form-group input:hover,
+.assignment-management .form-group select:hover,
+.assignment-management .form-group textarea:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.assignment-management .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Animations */
+@keyframes glassFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glassFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glassSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .assignment-management {
+    padding: 16px;
+  }
+
+  .assignment-management .dashboard-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .assignment-management .dashboard-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .assignment-management .actions-section {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .assignment-management .modal {
+    padding: 24px;
+    width: 96%;
+  }
+}
+
+@media (max-width: 480px) {
+  .assignment-management .actions-section {
+    grid-template-columns: 1fr;
+  }
+}

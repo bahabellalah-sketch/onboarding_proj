@@ -1,0 +1,327 @@
+@startuml Onboarding_Platform_Use_Case_Diagram
+' =============================================================================
+' Plateforme d'Onboarding — Diagramme de cas d'utilisation
+' Notation : UML 2.5 | Outil : PlantUML / StarUML (extension PlantUML)
+' Acteurs principaux : Administrateur, Manager, Collaborateur
+' Acteurs secondaires : Système de messagerie, Planificateur (tâches cron)
+' =============================================================================
+
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #E8F4FC
+  BorderColor #2C5F8A
+}
+skinparam actor {
+  BackgroundColor #FFF8E7
+  BorderColor #8A6D2C
+}
+skinparam rectangle {
+  BorderColor #333333
+  FontStyle bold
+}
+
+title Diagramme de cas d'utilisation\n<b>Plateforme d'Onboarding des Collaborateurs</b>
+
+left to right direction
+
+' --- Acteurs ---
+actor "Administrateur" as ADMIN #LightYellow
+actor "Manager" as MGR #LightYellow
+actor "Collaborateur" as COLLAB #LightYellow
+actor "Système Email\n(SMTP)" as SMTP #LightGray
+actor "Planificateur\n(Cron / @Scheduled)" as CRON #LightGray
+
+' Généralisation acteurs (héritage de capacités)
+MGR -|> COLLAB : <<hérite>>\n(vue équipe limitée)
+ADMIN -|> MGR : <<hérite>>\n(privilèges étendus)
+
+rectangle "Plateforme d'Onboarding" {
+
+  package "UC01 — Authentification & Compte" as PKG_AUTH #F5F5F5 {
+    usecase "UC01.1\nSe connecter" as UC_LOGIN
+    usecase "UC01.2\nS'inscrire" as UC_REGISTER
+    usecase "UC01.3\nRéinitialiser mot de passe" as UC_RESET_PWD
+    usecase "UC01.4\nSe déconnecter" as UC_LOGOUT
+    usecase "UC01.5\nVérifier adresse email" as UC_VERIFY_EMAIL
+    usecase "UC01.6\nGérer son profil" as UC_PROFILE
+    usecase "UC01.7\nChanger mot de passe" as UC_CHANGE_PWD
+    usecase "UC01.8\nTéléverser photo de profil" as UC_PHOTO
+    usecase "UC01.9\nInitialiser compte admin" as UC_INIT_ADMIN
+  }
+
+  package "UC02 — Gestion des Utilisateurs" as PKG_USER #F5F5F5 {
+    usecase "UC02.1\nCréer un utilisateur" as UC_CREATE_USER
+    usecase "UC02.2\nConsulter liste utilisateurs" as UC_LIST_USERS
+    usecase "UC02.3\nModifier rôle utilisateur" as UC_CHANGE_ROLE
+    usecase "UC02.4\nActiver / Désactiver utilisateur" as UC_TOGGLE_USER
+    usecase "UC02.5\nSupprimer utilisateur" as UC_DELETE_USER
+    usecase "UC02.6\nRechercher utilisateurs" as UC_SEARCH_USERS
+    usecase "UC02.7\nConsulter membres d'équipe" as UC_TEAM_MEMBERS
+    usecase "UC02.8\nConsulter utilisateur courant" as UC_CURRENT_USER
+  }
+
+  package "UC03 — Parcours & Étapes" as PKG_PARCOURS #F5F5F5 {
+    usecase "UC03.1\nCréer parcours d'onboarding" as UC_CREATE_PARCOURS
+    usecase "UC03.2\nModifier parcours" as UC_UPDATE_PARCOURS
+    usecase "UC03.3\nSupprimer parcours" as UC_DELETE_PARCOURS
+    usecase "UC03.4\nConsulter parcours" as UC_VIEW_PARCOURS
+    usecase "UC03.5\nGérer étapes (CRUD)" as UC_MANAGE_ETAPES
+    usecase "UC03.6\nGénérer étapes par IA\n(heuristique)" as UC_AI_ETAPES
+  }
+
+  package "UC04 — Affectations & Checklists" as PKG_ASSIGN #F5F5F5 {
+    usecase "UC04.1\nAssigner parcours à collaborateur" as UC_ASSIGN
+    usecase "UC04.2\nConsulter affectations" as UC_VIEW_ASSIGN
+    usecase "UC04.3\nConsulter mes affectations" as UC_MY_ASSIGN
+    usecase "UC04.4\nMettre à jour statut affectation" as UC_UPDATE_ASSIGN_STATUS
+    usecase "UC04.5\nMettre à jour avancement (%)" as UC_UPDATE_PROGRESS
+    usecase "UC04.6\nSupprimer affectation" as UC_DELETE_ASSIGN
+    usecase "UC04.7\nConsulter checklists" as UC_VIEW_CHECKLIST
+    usecase "UC04.8\nValider item checklist" as UC_COMPLETE_CHECKLIST
+    usecase "UC04.9\nConsulter affectations en retard" as UC_OVERDUE
+    usecase "UC04.10\nConsulter échéances proches" as UC_DEADLINE_NEAR
+  }
+
+  package "UC05 — Documents" as PKG_DOC #F5F5F5 {
+    usecase "UC05.1\nTéléverser document" as UC_UPLOAD_DOC
+    usecase "UC05.2\nTélécharger document" as UC_DOWNLOAD_DOC
+    usecase "UC05.3\nSigner document (SES)" as UC_SIGN_DOC
+    usecase "UC05.4\nSupprimer document" as UC_DELETE_DOC
+    usecase "UC05.5\nConsulter documents par étape" as UC_LIST_DOC
+  }
+
+  package "UC06 — Évaluations" as PKG_EVAL #F5F5F5 {
+    usecase "UC06.1\nÉvaluer une étape\n(étoiles 1-5)" as UC_RATE
+    usecase "UC06.2\nConsulter évaluation" as UC_VIEW_EVAL
+    usecase "UC06.3\nConsulter note moyenne" as UC_AVG_EVAL
+  }
+
+  package "UC07 — Notifications" as PKG_NOTIF #F5F5F5 {
+    usecase "UC07.1\nConsulter notifications" as UC_VIEW_NOTIF
+    usecase "UC07.2\nMarquer comme lue" as UC_READ_NOTIF
+    usecase "UC07.3\nSupprimer notification" as UC_DELETE_NOTIF
+    usecase "UC07.4\nDiffuser notification système" as UC_BROADCAST
+  }
+
+  package "UC08 — Analytics" as PKG_ANALYTICS #F5F5F5 {
+    usecase "UC08.1\nConsulter tableau de bord" as UC_DASHBOARD
+    usecase "UC08.2\nAnalyser progression globale" as UC_GLOBAL_PROGRESS
+    usecase "UC08.3\nFiltrer analytics affectations" as UC_FILTER_ANALYTICS
+    usecase "UC08.4\nConsulter stats départements" as UC_DEPT_STATS
+    usecase "UC08.5\nConsulter métriques temps réel" as UC_REALTIME
+  }
+
+  package "UC09 — Chat d'Équipe" as PKG_CHAT #F5F5F5 {
+    usecase "UC09.1\nConsulter messages équipe" as UC_VIEW_CHAT
+    usecase "UC09.2\nEnvoyer message" as UC_SEND_CHAT
+    usecase "UC09.3\nModifier message" as UC_EDIT_CHAT
+    usecase "UC09.4\nSupprimer message" as UC_DEL_CHAT
+  }
+
+  package "UC10 — Signalements" as PKG_REPORT #F5F5F5 {
+    usecase "UC10.1\nSignaler un utilisateur" as UC_REPORT_USER
+    usecase "UC10.2\nConsulter signalements en attente" as UC_PENDING_REPORTS
+    usecase "UC10.3\nRésoudre signalement" as UC_RESOLVE_REPORT
+    usecase "UC10.4\nConsulter historique signalements" as UC_REPORT_HISTORY
+  }
+
+  package "UC11 — Traitements Automatiques" as PKG_AUTO #F5F5F5 {
+    usecase "UC11.1\nMettre à jour statuts en retard" as UC_CRON_OVERDUE
+    usecase "UC11.2\nEnvoyer rappels d'échéance" as UC_CRON_REMINDER
+    usecase "UC11.3\nGénérer checklists\nà l'affectation" as UC_GEN_CHECKLIST
+    usecase "UC11.4\nAuditer signature document" as UC_AUDIT_SIGN
+  }
+}
+
+' ===================== Relations Acteurs ↔ Cas d'utilisation =====================
+
+' --- Tous les rôles authentifiés ---
+COLLAB --> UC_LOGIN
+COLLAB --> UC_LOGOUT
+COLLAB --> UC_PROFILE
+COLLAB --> UC_CHANGE_PWD
+COLLAB --> UC_VERIFY_EMAIL
+COLLAB --> UC_CURRENT_USER
+
+MGR --> UC_LOGIN
+MGR --> UC_LOGOUT
+MGR --> UC_PROFILE
+MGR --> UC_CHANGE_PWD
+MGR --> UC_VERIFY_EMAIL
+MGR --> UC_PHOTO
+
+ADMIN --> UC_LOGIN
+ADMIN --> UC_LOGOUT
+ADMIN --> UC_PROFILE
+ADMIN --> UC_CHANGE_PWD
+ADMIN --> UC_VERIFY_EMAIL
+ADMIN --> UC_PHOTO
+ADMIN --> UC_INIT_ADMIN
+
+' --- Public / inscription ---
+COLLAB --> UC_REGISTER
+COLLAB --> UC_RESET_PWD
+MGR --> UC_RESET_PWD
+ADMIN --> UC_RESET_PWD
+
+' --- Gestion utilisateurs ---
+ADMIN --> UC_CREATE_USER
+ADMIN --> UC_LIST_USERS
+ADMIN --> UC_CHANGE_ROLE
+ADMIN --> UC_TOGGLE_USER
+ADMIN --> UC_DELETE_USER
+ADMIN --> UC_SEARCH_USERS
+MGR --> UC_LIST_USERS
+MGR --> UC_SEARCH_USERS
+MGR --> UC_TEAM_MEMBERS
+COLLAB --> UC_TEAM_MEMBERS
+
+' --- Parcours ---
+ADMIN --> UC_CREATE_PARCOURS
+ADMIN --> UC_UPDATE_PARCOURS
+ADMIN --> UC_DELETE_PARCOURS
+ADMIN --> UC_VIEW_PARCOURS
+ADMIN --> UC_MANAGE_ETAPES
+ADMIN --> UC_AI_ETAPES
+MGR --> UC_CREATE_PARCOURS
+MGR --> UC_UPDATE_PARCOURS
+MGR --> UC_VIEW_PARCOURS
+MGR --> UC_MANAGE_ETAPES
+MGR --> UC_AI_ETAPES
+COLLAB --> UC_VIEW_PARCOURS
+
+' --- Affectations ---
+ADMIN --> UC_ASSIGN
+ADMIN --> UC_VIEW_ASSIGN
+ADMIN --> UC_UPDATE_ASSIGN_STATUS
+ADMIN --> UC_UPDATE_PROGRESS
+ADMIN --> UC_DELETE_ASSIGN
+ADMIN --> UC_OVERDUE
+ADMIN --> UC_DEADLINE_NEAR
+MGR --> UC_ASSIGN
+MGR --> UC_VIEW_ASSIGN
+MGR --> UC_UPDATE_ASSIGN_STATUS
+MGR --> UC_UPDATE_PROGRESS
+MGR --> UC_OVERDUE
+MGR --> UC_DEADLINE_NEAR
+COLLAB --> UC_MY_ASSIGN
+COLLAB --> UC_VIEW_CHECKLIST
+COLLAB --> UC_COMPLETE_CHECKLIST
+
+' --- Documents ---
+COLLAB --> UC_UPLOAD_DOC
+COLLAB --> UC_DOWNLOAD_DOC
+COLLAB --> UC_LIST_DOC
+COLLAB --> UC_DELETE_DOC
+MGR --> UC_UPLOAD_DOC
+MGR --> UC_DOWNLOAD_DOC
+MGR --> UC_SIGN_DOC
+MGR --> UC_LIST_DOC
+ADMIN --> UC_SIGN_DOC
+ADMIN --> UC_UPLOAD_DOC
+ADMIN --> UC_DOWNLOAD_DOC
+
+' --- Évaluations ---
+COLLAB --> UC_RATE
+COLLAB --> UC_VIEW_EVAL
+MGR --> UC_VIEW_EVAL
+MGR --> UC_AVG_EVAL
+ADMIN --> UC_AVG_EVAL
+
+' --- Notifications ---
+COLLAB --> UC_VIEW_NOTIF
+COLLAB --> UC_READ_NOTIF
+COLLAB --> UC_DELETE_NOTIF
+MGR --> UC_VIEW_NOTIF
+MGR --> UC_READ_NOTIF
+ADMIN --> UC_BROADCAST
+ADMIN --> UC_VIEW_NOTIF
+
+' --- Analytics ---
+ADMIN --> UC_DASHBOARD
+ADMIN --> UC_GLOBAL_PROGRESS
+ADMIN --> UC_FILTER_ANALYTICS
+ADMIN --> UC_DEPT_STATS
+ADMIN --> UC_REALTIME
+MGR --> UC_DASHBOARD
+MGR --> UC_GLOBAL_PROGRESS
+MGR --> UC_FILTER_ANALYTICS
+MGR --> UC_DEPT_STATS
+
+' --- Chat ---
+COLLAB --> UC_VIEW_CHAT
+COLLAB --> UC_SEND_CHAT
+COLLAB --> UC_EDIT_CHAT
+COLLAB --> UC_DEL_CHAT
+MGR --> UC_VIEW_CHAT
+MGR --> UC_SEND_CHAT
+MGR --> UC_EDIT_CHAT
+MGR --> UC_DEL_CHAT
+
+' --- Signalements ---
+COLLAB --> UC_REPORT_USER
+MGR --> UC_REPORT_USER
+MGR --> UC_REPORT_HISTORY
+ADMIN --> UC_PENDING_REPORTS
+ADMIN --> UC_RESOLVE_REPORT
+ADMIN --> UC_REPORT_HISTORY
+
+' ===================== Include / Extend =====================
+
+UC_LOGIN ..> UC_VERIFY_EMAIL : <<include>>\n(si email non vérifié)
+UC_ASSIGN ..> UC_GEN_CHECKLIST : <<include>>
+UC_ASSIGN ..> UC_VIEW_NOTIF : <<include>>\n(notifier collaborateur)
+UC_COMPLETE_CHECKLIST ..> UC_VIEW_NOTIF : <<include>>
+UC_SIGN_DOC ..> UC_AUDIT_SIGN : <<include>>
+UC_SIGN_DOC ..> UC_VIEW_NOTIF : <<include>>
+UC_RATE ..> UC_VIEW_NOTIF : <<include>>
+UC_RESET_PWD ..> SMTP : <<include>>
+UC_VERIFY_EMAIL ..> SMTP : <<include>>
+UC_CREATE_USER ..> SMTP : <<include>>\n(email bienvenue)
+UC_RESOLVE_REPORT ..> SMTP : <<extend>>\n(email avertissement)
+
+UC_CRON_OVERDUE <-- CRON
+UC_CRON_REMINDER <-- CRON
+UC_CRON_OVERDUE ..> UC_VIEW_NOTIF : <<include>>
+
+UC_UPLOAD_DOC <.. UC_SIGN_DOC : <<extend>>\n(validation manager)
+
+note right of UC_AI_ETAPES
+  Génération heuristique (mots-clés métier)
+  sans API LLM externe.
+  Service : ParcoursEtapeAiGeneratorService
+end note
+
+note bottom of ADMIN
+  <b>Rôle ADMINISTRATEUR</b>
+  Accès complet : utilisateurs,
+  analytics, résolution signalements,
+  diffusion notifications.
+end note
+
+note bottom of MGR
+  <b>Rôle MANAGER</b>
+  Périmètre : collaborateurs
+  rattachés (manager_id).
+end note
+
+note bottom of COLLAB
+  <b>Rôle COLLABORATEUR</b>
+  Parcours assignés, checklists,
+  documents, évaluations, chat équipe.
+end note
+
+legend right
+  |= Symbole |= Signification |
+  | <<include>> | Cas obligatoirement invoqué |
+  | <<extend>> | Extension optionnelle |
+  | -|> | Généralisation acteur |
+endlegend
+
+@enduml

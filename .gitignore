@@ -1,0 +1,27 @@
+# Frontend
+node_modules/
+frontend/node_modules/
+
+# Backend
+backend/target/
+backend/uploads/
+
+# IDE / OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Env / secrets
+.env
+.env.*
+
+# Maven wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Database helper scripts (documentation, not part of code)
+db/

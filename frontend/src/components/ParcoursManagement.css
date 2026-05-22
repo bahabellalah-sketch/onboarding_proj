@@ -1,0 +1,847 @@
+/* ================================================================
+   Parcours Management — Modern Glassmorphism Design
+   Inspired by CodeFlow AI reference
+   ================================================================ */
+
+/* === Container === */
+.parcours-management {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* === Dashboard Header === */
+.parcours-management .dashboard-header {
+  margin-bottom: 32px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.parcours-management .dashboard-header .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.parcours-management .dashboard-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, #e0e7ff 0%, #a5b4fc 40%, #22d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.025em;
+}
+
+.parcours-management .dashboard-header .user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.parcours-management .dashboard-header .user-info span {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* === Error Message === */
+.parcours-management .error-message {
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  background: rgba(244, 63, 94, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  border-radius: 12px;
+  color: #fb7185;
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* === Management Container === */
+.parcours-management .management-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* === Section === */
+.parcours-management .section {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.parcours-management .section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+}
+
+/* === Section Header === */
+.parcours-management .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.parcours-management .header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* === Parcours Grid === */
+.parcours-management .parcours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* === Parcours Card === */
+.parcours-management .parcours-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.parcours-management .parcours-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(99, 102, 241, 0.03));
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.parcours-management .parcours-card:hover {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-4px);
+}
+
+.parcours-management .parcours-card.selected {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  background: rgba(30, 41, 59, 0.7);
+}
+
+.parcours-management .parcours-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .parcours-card p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 6px 0;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .parcours-card p strong {
+  color: #64748b;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.parcours-management .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.parcours-management .status.actif {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.parcours-management .status.desactive {
+  background: rgba(100, 116, 139, 0.15);
+  color: #94a3b8;
+  border-color: rgba(100, 116, 139, 0.3);
+}
+
+/* === Card Actions === */
+.parcours-management .card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .card-actions .btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  background: transparent;
+  color: #94a3b8;
+}
+
+.parcours-management .card-actions .btn:hover {
+  transform: translateY(-2px);
+}
+
+.parcours-management .card-actions .btn-info {
+  background: rgba(59, 130, 246, 0.12);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.parcours-management .card-actions .btn-info:hover {
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.parcours-management .card-actions .btn-danger {
+  background: rgba(244, 63, 94, 0.12);
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+.parcours-management .card-actions .btn-danger:hover {
+  background: rgba(244, 63, 94, 0.2);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+}
+
+/* === Etapes List === */
+.parcours-management .etapes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.parcours-management .etape-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.parcours-management .etape-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(99, 102, 241, 0.03));
+  pointer-events: none;
+}
+
+.parcours-management .etape-card:hover {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 15px rgba(99, 102, 241, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+.parcours-management .etape-card h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .etape-card p {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0 0 4px 0;
+  line-height: 1.5;
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .etape-card p strong {
+  color: #64748b;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+/* === Resource Links === */
+.parcours-management .resource-links {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.parcours-management .resource-links p {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.parcours-management .links-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.parcours-management .resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 8px;
+  color: #818cf8 !important;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.parcours-management .resource-link:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.15);
+}
+
+.parcours-management .resource-text {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+/* === AI Hint === */
+.parcours-management .ai-hint {
+  margin-top: -0.5rem;
+  margin-bottom: 16px;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.5;
+  padding: 12px 16px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+/* === Loading State === */
+.parcours-management .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.parcours-management .loading::before {
+  content: '';
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+  border: 3px solid rgba(99, 102, 241, 0.15);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* === Buttons Overrides in ParcoursManagement === */
+.parcours-management .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+  min-height: 40px;
+}
+
+.parcours-management .btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.parcours-management .btn:hover::after {
+  transform: translateX(100%);
+}
+
+.parcours-management .btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.parcours-management .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.parcours-management .btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+
+.parcours-management .btn-success:hover:not(:disabled) {
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+  transform: translateY(-2px);
+}
+
+.parcours-management .btn-purple {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 50%, #6d28d9 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+}
+
+.parcours-management .btn-purple:hover:not(:disabled) {
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+  transform: translateY(-2px);
+}
+
+.parcours-management .btn-primary {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 50%, #4338ca 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.parcours-management .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+  transform: translateY(-2px);
+}
+
+.parcours-management .btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.parcours-management .btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* === Modal Overrides === */
+.parcours-management .modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.parcours-management .modal {
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 32px;
+  max-width: 600px;
+  width: 92%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.parcours-management .modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 40%, #06b6d4 100%);
+  border-radius: 20px 20px 0 0;
+}
+
+.parcours-management .modal h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: #f1f5f9;
+  letter-spacing: -0.02em;
+}
+
+.parcours-management .modal p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* === Form Overrides === */
+.parcours-management .form-group {
+  margin-bottom: 16px;
+}
+
+.parcours-management .form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.parcours-management .form-input,
+.parcours-management .form-select,
+.parcours-management .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: #f1f5f9;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.parcours-management .form-input::placeholder,
+.parcours-management .form-textarea::placeholder {
+  color: #475569;
+  font-style: italic;
+}
+
+.parcours-management .form-input:focus,
+.parcours-management .form-select:focus,
+.parcours-management .form-textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2), 0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.parcours-management .form-input:hover:not(:focus),
+.parcours-management .form-select:hover:not(:focus),
+.parcours-management .form-textarea:hover:not(:focus) {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.parcours-management .form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.parcours-management .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.parcours-management .form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.parcours-management .form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6366f1;
+  cursor: pointer;
+}
+
+.parcours-management .form-checkbox span {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.parcours-management .form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* === Confirmation Modal === */
+.parcours-management .confirmation-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1060;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.parcours-management .confirmation-content {
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.parcours-management .confirmation-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.parcours-management .confirmation-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 12px;
+}
+
+.parcours-management .confirmation-message {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.parcours-management .confirmation-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.parcours-management .confirm-btn,
+.parcours-management .cancel-btn {
+  padding: 10px 32px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.parcours-management .confirm-btn {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+}
+
+.parcours-management .confirm-btn:hover {
+  box-shadow: 0 8px 25px rgba(244, 63, 94, 0.4);
+  transform: translateY(-2px);
+}
+
+.parcours-management .cancel-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.parcours-management .cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* === Animations === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+  .parcours-management .parcours-grid,
+  .parcours-management .etapes-list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .parcours-management {
+    padding: 16px;
+  }
+
+  .parcours-management .dashboard-header .header-content {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .parcours-management .dashboard-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .parcours-management .section-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .parcours-management .header-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .parcours-management .parcours-grid,
+  .parcours-management .etapes-list {
+    grid-template-columns: 1fr;
+  }
+
+  .parcours-management .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .parcours-management .modal {
+    padding: 24px;
+    width: 96%;
+  }
+
+  .parcours-management .confirmation-content {
+    padding: 24px;
+  }
+
+  .parcours-management .form-actions {
+    flex-direction: column;
+  }
+
+  .parcours-management .confirmation-actions {
+    flex-direction: column;
+  }
+
+  .parcours-management .confirm-btn,
+  .parcours-management .cancel-btn {
+    width: 100%;
+  }
+
+  .parcours-management .card-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .parcours-management {
+    padding: 12px;
+  }
+
+  .parcours-management .parcours-card,
+  .parcours-management .etape-card {
+    padding: 16px;
+  }
+}

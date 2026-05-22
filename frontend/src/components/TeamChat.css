@@ -1,0 +1,210 @@
+.team-page .team-chat {
+  margin-top: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: teamFadeInUp 0.5s ease-out;
+}
+
+.team-chat__header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.12) 0%, transparent 100%);
+}
+
+.team-chat__header h2 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+}
+
+.team-chat__header p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary, #94a3b8);
+}
+
+.team-chat__body {
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+.team-chat__messages {
+  flex: 1;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.team-chat__status,
+.team-chat__empty {
+  text-align: center;
+  color: var(--text-secondary, #94a3b8);
+  padding: var(--space-8);
+  margin: 0;
+}
+
+.team-chat__bubble {
+  max-width: 85%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.team-chat__bubble--own {
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.25) 0%, rgba(127, 29, 29, 0.2) 100%);
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+.team-chat__bubble--other {
+  align-self: flex-start;
+  background: rgba(30, 41, 59, 0.9);
+}
+
+.team-chat__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-xs);
+}
+
+.team-chat__author {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.team-chat__role {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(148, 163, 184, 0.2);
+  color: var(--text-secondary, #94a3b8);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+}
+
+.team-chat__time {
+  margin-left: auto;
+  color: var(--text-muted, #64748b);
+}
+
+.team-chat__text {
+  margin: 0;
+  color: var(--text-primary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.team-chat__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.team-chat__action-btn {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.6);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.team-chat__action-btn:hover:not(:disabled) {
+  background: rgba(51, 65, 85, 0.9);
+}
+
+.team-chat__action-btn--danger {
+  border-color: rgba(220, 38, 38, 0.4);
+  color: #fca5a5;
+}
+
+.team-chat__action-btn--danger:hover:not(:disabled) {
+  background: rgba(127, 29, 29, 0.35);
+}
+
+.team-chat__action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.team-chat__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.team-chat__input--inline {
+  width: 100%;
+}
+
+.team-chat__edit-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.team-chat__error {
+  margin: 0 var(--space-5);
+  padding: var(--space-2) var(--space-3);
+  color: #fca5a5;
+  font-size: var(--font-size-sm);
+}
+
+.team-chat__composer {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.team-chat__input {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.team-chat__input:focus {
+  outline: none;
+  border-color: rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+}
+
+.team-chat__send {
+  flex-shrink: 0;
+  min-width: 100px;
+}
+
+@media (max-width: 768px) {
+  .team-chat__bubble {
+    max-width: 95%;
+  }
+
+  .team-chat__composer {
+    flex-direction: column;
+  }
+
+  .team-chat__send {
+    width: 100%;
+  }
+}

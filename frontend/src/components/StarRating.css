@@ -1,0 +1,131 @@
+.star-rating {
+  display: inline-block;
+  direction: rtl; /* Right-to-left for proper star ordering */
+}
+
+.stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 24px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  user-select: none;
+  display: inline-block;
+  line-height: 1;
+}
+
+.star.small {
+  font-size: 16px;
+}
+
+.star.medium {
+  font-size: 24px;
+}
+
+.star.large {
+  font-size: 32px;
+}
+
+.star.empty {
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffd700; /* Gold/yellow color for filled stars */
+}
+
+.star.interactive:hover {
+  color: #ffd700; /* Yellow on hover */
+}
+
+.star.interactive:hover ~ .star {
+  color: #ddd; /* Stars to the right stay gray on hover */
+}
+
+.star.readonly {
+  cursor: default;
+}
+
+.star.readonly.filled {
+  color: #ffd700;
+}
+
+.rating-text {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Hover effects for interactive stars */
+.star.interactive:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star.interactive:active {
+  transform: scale(0.95);
+}
+
+/* Container styling */
+.star-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* RTL fix for hover effects */
+.stars {
+  direction: ltr; /* Left-to-right for stars themselves */
+}
+
+.star-rating .stars {
+  direction: ltr;
+}
+
+/* Hover effect - fill stars up to the hovered one */
+.star.interactive:hover,
+.star.interactive:hover ~ .star {
+  color: #ddd;
+}
+
+.star.interactive:hover ~ .star {
+  color: #ddd;
+}
+
+/* When hovering over a star, fill it and all stars to its left */
+.star.interactive:nth-child(1):hover ~ .star,
+.star.interactive:nth-child(2):hover ~ .star,
+.star.interactive:nth-child(3):hover ~ .star,
+.star.interactive:nth-child(4):hover ~ .star,
+.star.interactive:nth-child(5):hover {
+  color: #ddd;
+}
+
+/* Fill stars on hover - using sibling selectors */
+.star.interactive:hover {
+  color: #ffd700;
+}
+
+.star.interactive:hover ~ .star {
+  color: #ddd;
+}
+
+/* Better hover implementation using JavaScript-driven classes */
+.star.interactive.hover {
+  color: #ffd700;
+}
+
+/* Ensure proper star ordering */
+.stars .star {
+  order: 5;
+}
+
+.stars .star:nth-child(1) { order: 5; }
+.stars .star:nth-child(2) { order: 4; }
+.stars .star:nth-child(3) { order: 3; }
+.stars .star:nth-child(4) { order: 2; }
+.stars .star:nth-child(5) { order: 1; }
