@@ -1,0 +1,127 @@
+.eval-panel {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.eval-panel__title {
+  margin: 0 0 var(--space-4);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.eval-panel__meta {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.eval-form .form-group {
+  margin-bottom: var(--space-4);
+}
+
+.eval-readonly {
+  padding: var(--space-4);
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+}
+
+.star-rating-input {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.star-rating-input__star {
+  background: none;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.star-rating-input__star--on {
+  color: #fbbf24;
+}
+
+.star-rating-input__star:disabled {
+  cursor: default;
+}
+
+.eval-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.eval-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.eval-table th,
+.eval-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.eval-table th {
+  background: rgba(15, 23, 42, 0.6);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.eval-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  background: rgba(220, 38, 38, 0.15);
+  color: #fecaca;
+}
+
+.eval-badge--manager {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+}
+
+.eval-badge--collab {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+}
+
+.eval-badge--step {
+  background: rgba(148, 163, 184, 0.15);
+  color: var(--text-secondary);
+}
+
+.eval-pending-card {
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  background: rgba(30, 41, 59, 0.4);
+}
+
+.eval-pending-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.eval-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-bottom: var(--space-6);
+}

@@ -47,10 +47,22 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['ADMINISTRATEUR'],
   },
   {
+    path: '/evaluations',
+    label: 'Évaluations',
+    icon: '★',
+    roles: ['ADMINISTRATEUR'],
+  },
+  {
+    path: '/evaluations/pending',
+    label: 'À évaluer',
+    icon: '★',
+    roles: ['MANAGER'],
+  },
+  {
     path: '/reports',
-    label: 'Rapports',
+    label: 'Signalements',
     icon: '▣',
-    roles: ['ADMINISTRATEUR', 'MANAGER'],
+    roles: ['ADMINISTRATEUR'],
   },
   {
     path: '/notifications',
@@ -77,5 +89,7 @@ export function getPageTitle(pathname: string): string {
   if (exact) return exact.label;
   if (pathname.startsWith('/profile/')) return 'Profil collaborateur';
   if (pathname.startsWith('/profile')) return 'Mon profil';
+  if (pathname.startsWith('/evaluations/pending')) return 'À évaluer';
+  if (pathname.startsWith('/evaluations')) return 'Évaluations';
   return 'Onboarding';
 }

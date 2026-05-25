@@ -254,6 +254,7 @@
 .app-content > .profile-management,
 .app-content > .user-management,
 .app-content > .report-management,
+.app-content > .evaluation-management,
 .app-content > .dashboard-container.team-page {
   padding: 0;
   max-width: 1400px;

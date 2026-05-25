@@ -16,6 +16,7 @@ import ConfirmationModal from './ConfirmationModal';
 import './AssignmentManagement.css';
 import PageHeader from './layout/PageHeader';
 import EvaluationComponent from './EvaluationComponent';
+import AssignmentEvaluationPanel from './evaluations/AssignmentEvaluationPanel';
 
 const AssignmentManagement: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -422,6 +423,13 @@ const AssignmentManagement: React.FC = () => {
                         📋 {checklists[assignment.id] ? 'Masquer' : 'Voir'} Checklists
                       </button>
                     </div>
+
+                    <AssignmentEvaluationPanel
+                      assignmentId={assignment.id}
+                      parcoursNom={assignment.parcoursNom}
+                      pourcentageAvancement={assignment.pourcentageAvancement}
+                      statut={assignment.statut}
+                    />
 
                     {/* Section Checklists */}
                     {checklists[assignment.id] && (

@@ -202,6 +202,41 @@ public class NotificationService {
     }
 
     /**
+     * Notify after bilan collaborateur or évaluation manager sur une assignation.
+     */
+    public void sendAssignmentEvaluationNotification(Evaluation evaluation) {
+        try {
+            Assignment assignment = evaluation.getAssignment();
+            if (assignment == null) {
+                return;
+            }
+            User collaborateur = assignment.getUser();
+            if (collaborateur == null) {
+                return;
+            }
+            if (evaluation.getEvaluationType() == com.onboarding.entity.EvaluationType.PARCOURS_COLLAB) {
+                User manager = collaborateur.getManager();
+                if (manager == null) {
+                    return;
+                }
+                String message = collaborateur.getPrenom() + " " + collaborateur.getNom()
+                        + " a soumis son bilan de fin de parcours ("
+                        + evaluation.getRating() + "/5).";
+                notifyOnce("ASSIGNMENT_EVAL", evaluation.getId(), manager.getId(),
+                        message, NotificationType.EVALUATION_RECEIVED, collaborateur.getId());
+            } else if (evaluation.getEvaluationType() == com.onboarding.entity.EvaluationType.PARCOURS_MANAGER) {
+                String message = "Votre manager a évalué votre parcours « "
+                        + (assignment.getParcours() != null ? assignment.getParcours().getNom() : "onboarding")
+                        + " » (" + evaluation.getRating() + "/5).";
+                notifyOnce("ASSIGNMENT_EVAL", evaluation.getId(), collaborateur.getId(),
+                        message, NotificationType.EVALUATION_RECEIVED, evaluation.getUser().getId());
+            }
+        } catch (Exception e) {
+            System.out.println("Error sending assignment evaluation notification: " + e.getMessage());
+        }
+    }
+
+    /**
      * Send notification for assignment completion to manager
      */
     public void sendAssignmentCompletionNotification(Assignment assignment, User collaborateur) {

@@ -203,7 +203,7 @@ const Dashboard: React.FC = () => {
               onClick={() => setShowCreateForm(true)}
               className="btn btn-success btn-sm"
             >
-              + Nouvel utilisateur
+              +ajouter un utilisateur
             </button>
           ) : undefined
         }

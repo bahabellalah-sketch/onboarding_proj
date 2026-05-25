@@ -49,17 +49,18 @@ public class SecurityConfig {
                 // ====== PUBLIC endpoints (no auth required) ======
                 .requestMatchers(
                         new AntPathRequestMatcher("/api/auth/login", "POST"),
+                        new AntPathRequestMatcher("/api/auth/init-admin", "POST"),
                         new AntPathRequestMatcher("/api/auth/forgot-password", "POST"),
                         new AntPathRequestMatcher("/api/auth/reset-password", "POST"),
                         new AntPathRequestMatcher("/api/email-verification/verify", "GET"),
                         new AntPathRequestMatcher("/uploads/**")
                 ).permitAll()
-                // ====== Evaluation endpoint accessible for direct links ======
-                .requestMatchers("/api/evaluations/**").permitAll()
                 // ====== ADMIN-only endpoints ======
                 .requestMatchers(new AntPathRequestMatcher("/api/users/**", "DELETE")).hasRole("ADMINISTRATEUR")
                 .requestMatchers(new AntPathRequestMatcher("/api/reports/resolve/**")).hasRole("ADMINISTRATEUR")
                 .requestMatchers(new AntPathRequestMatcher("/api/reports/pending/**")).hasRole("ADMINISTRATEUR")
+                .requestMatchers(new AntPathRequestMatcher("/api/reports/user/**")).hasRole("ADMINISTRATEUR")
+                .requestMatchers(new AntPathRequestMatcher("/api/reports", "GET")).hasRole("ADMINISTRATEUR")
                 .requestMatchers(new AntPathRequestMatcher("/api/analytics/**")).hasAnyRole("ADMINISTRATEUR", "MANAGER")
                 // ====== Authenticated endpoints (any logged-in user) ======
                 .requestMatchers(
@@ -74,28 +75,14 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/api/notifications/**"),
                         new AntPathRequestMatcher("/api/documents/**"),
                         new AntPathRequestMatcher("/api/team-chat/**"),
-                        new AntPathRequestMatcher("/api/reports/**")
+                        new AntPathRequestMatcher("/api/reports/**"),
+                        new AntPathRequestMatcher("/api/evaluations/**")
                 ).authenticated()
                 // ====== Users management requires auth (further checked in controller) ======
                 .requestMatchers("/api/users/**").authenticated()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        
-        return http.build();
-    }
-    
-    @Bean
-    public SecurityFilterChain evaluationFilterChain(HttpSecurity http) throws Exception {
-        http
-            .securityMatcher("/api/evaluations/**")
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.disable())
-            .securityContext(securityContext -> securityContext.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()
-            );
         
         return http.build();
     }

@@ -86,8 +86,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const user = await api.login(credentials);
       dispatch({ type: 'LOGIN_SUCCESS', payload: user });
     } catch (error: any) {
-      const errorMessage = error.response?.data || 'Login failed';
-      dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage as string });
+      const data = error.response?.data;
+      const errorMessage =
+        typeof data === 'string'
+          ? data
+          : data?.message || data?.error || 'Email ou mot de passe incorrect';
+      dispatch({ type: 'LOGIN_FAILURE', payload: errorMessage });
     }
   };
 

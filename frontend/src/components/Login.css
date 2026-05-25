@@ -350,3 +350,15 @@
     width: 100%;
   }
 }
+
+.login-dev-hint {
+  margin-top: 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgba(148, 163, 184, 0.9);
+  text-align: center;
+}
+
+.login-dev-hint strong {
+  color: rgba(226, 232, 240, 0.95);
+}

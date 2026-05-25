@@ -14,6 +14,8 @@ import ForgotPassword from './components/ForgotPassword';
 import NotificationsPage from './components/NotificationsPage';
 import ReportManagement from './components/ReportManagement';
 import CollaboratorTeamPage from './components/CollaboratorTeamPage';
+import EvaluationManagementPage from './components/evaluations/EvaluationManagementPage';
+import ManagerEvaluationsPage from './components/evaluations/ManagerEvaluationsPage';
 import AuthenticatedLayout from './components/layout/AuthenticatedLayout';
 
 function AppRoutes() {
@@ -82,7 +84,7 @@ function AppRoutes() {
         <Route
           path="/reports"
           element={
-            isAuthenticated && (user?.role === 'ADMINISTRATEUR' || user?.role === 'MANAGER') ? (
+            isAuthenticated && user?.role === 'ADMINISTRATEUR' ? (
               <ReportManagement />
             ) : (
               <Navigate to={getDefaultRoute()} replace />
@@ -96,6 +98,26 @@ function AppRoutes() {
               <CollaboratorTeamPage />
             ) : (
               <Navigate to={isAuthenticated ? getDefaultRoute() : '/login'} replace />
+            )
+          }
+        />
+        <Route
+          path="/evaluations"
+          element={
+            isAuthenticated && user?.role === 'ADMINISTRATEUR' ? (
+              <EvaluationManagementPage />
+            ) : (
+              <Navigate to={getDefaultRoute()} replace />
+            )
+          }
+        />
+        <Route
+          path="/evaluations/pending"
+          element={
+            isAuthenticated && user?.role === 'MANAGER' ? (
+              <ManagerEvaluationsPage />
+            ) : (
+              <Navigate to={getDefaultRoute()} replace />
             )
           }
         />

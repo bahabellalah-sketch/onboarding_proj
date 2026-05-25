@@ -98,7 +98,7 @@ public class UserReportController {
     }
     
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('ADMINISTRATEUR', 'MANAGER')")
+    @PreAuthorize("hasRole('ADMINISTRATEUR')")
     public ResponseEntity<?> getReportsByUser(@PathVariable Long userId) {
         try {
             // Ajouter une vérification explicite pour éviter le warning

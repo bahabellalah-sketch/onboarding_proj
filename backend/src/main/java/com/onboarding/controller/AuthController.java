@@ -53,6 +53,7 @@ public class AuthController {
             admin.setPoste("Administrateur Système");
             admin.setDepartement("IT");
             admin.setStatut(true);
+            admin.setEmailVerified(true);
             admin.setDateCreation(java.time.LocalDateTime.now());
             
             userService.save(admin);

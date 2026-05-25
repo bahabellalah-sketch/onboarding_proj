@@ -144,10 +144,10 @@ const EvaluationComponent: React.FC<EvaluationComponentProps> = ({
   if (existingEvaluation) {
     return (
       <div className="evaluation-component already-evaluated">
-        <h4>✅ Already Evaluated</h4>
+        <h4>✅ Déjà évalué</h4>
         <div className="evaluation-info">
           <div className="rating-display">
-            <p><strong>Rating:</strong></p>
+            <p><strong>Note :</strong></p>
             <div className="star-rating readonly">
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
@@ -161,7 +161,7 @@ const EvaluationComponent: React.FC<EvaluationComponentProps> = ({
           </div>
           {existingEvaluation.comment && (
             <div className="comment-display">
-              <p><strong>Comment:</strong></p>
+              <p><strong>Commentaire :</strong></p>
               <div className="comment-content">
                 {existingEvaluation.comment}
               </div>
@@ -176,7 +176,7 @@ const EvaluationComponent: React.FC<EvaluationComponentProps> = ({
   if (isLoading) {
     return (
       <div className="evaluation-component loading">
-        <p>Loading evaluation...</p>
+        <p>Chargement…</p>
       </div>
     );
   }
@@ -189,11 +189,11 @@ const EvaluationComponent: React.FC<EvaluationComponentProps> = ({
   if (canEvaluateAsCollaborator) {
     return (
       <div className="evaluation-component">
-        <h4>Evaluate: {checklistTitle}</h4>
+        <h4>Évaluer l&apos;étape : {checklistTitle}</h4>
         
         {success && (
           <div className="success-message">
-            ✅ Evaluation submitted successfully!
+            ✅ Évaluation enregistrée !
           </div>
         )}
 
@@ -205,22 +205,22 @@ const EvaluationComponent: React.FC<EvaluationComponentProps> = ({
 
         <form onSubmit={handleSubmit} className="evaluation-form">
           <div className="form-group">
-            <label>Rating *</label>
+            <label>Note *</label>
             <StarRating value={rating} onChange={setRating} />
           </div>
 
           <div className="form-group">
-            <label>Comment</label>
+            <label>Commentaire</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Add your comments..."
+              placeholder="Votre avis sur cette étape…"
               rows={3}
             />
           </div>
 
           <button type="submit" disabled={isSubmitting} className="btn btn-primary">
-            {isSubmitting ? 'Submitting...' : 'Submit Evaluation'}
+            {isSubmitting ? 'Envoi…' : 'Envoyer l\'évaluation'}
           </button>
         </form>
       </div>

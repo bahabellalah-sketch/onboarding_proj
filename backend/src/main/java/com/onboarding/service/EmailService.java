@@ -1,12 +1,16 @@
 package com.onboarding.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.time.LocalDateTime;
+import java.util.Enumeration;
 import java.util.UUID;
 
 @Service
@@ -19,8 +23,45 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
     
-    @Value("${app.frontend.base-url:http://localhost:3000}")
     private String frontendBaseUrl;
+    
+    @PostConstruct
+    public void init() {
+        this.frontendBaseUrl = detectLocalIpUrl();
+    }
+    
+    private String detectLocalIpUrl() {
+        try {
+            Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+            
+            if (interfaces != null) {
+                while (interfaces.hasMoreElements()) {
+                    NetworkInterface ni = interfaces.nextElement();
+                    if (ni.isLoopback() || !ni.isUp()) continue;
+                    
+                    Enumeration<InetAddress> addresses = ni.getInetAddresses();
+                    while (addresses.hasMoreElements()) {
+                        InetAddress addr = addresses.nextElement();
+                        if (addr instanceof java.net.Inet4Address) {
+                            String ip = addr.getHostAddress();
+                            // Chercher une IP LAN (192.168.x.x ou 10.x.x.x)
+                            if (ip.startsWith("192.168.") || ip.startsWith("10.")) {
+                                return "http://" + ip + ":3000";
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Fallback: essayer l'IP locale par défaut
+            String localIp = InetAddress.getLocalHost().getHostAddress();
+            return "http://" + localIp + ":3000";
+            
+        } catch (Exception e) {
+            System.err.println("Impossible de détecter l'IP locale: " + e.getMessage());
+            return "http://localhost:3000";
+        }
+    }
     
     public void sendPasswordResetEmail(String toEmail, String resetToken) {
         String resetUrl = frontendBaseUrl + "/reset-password?token=" + resetToken;
